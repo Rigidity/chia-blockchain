@@ -1367,8 +1367,11 @@ class WalletRpcApi:
         if isinstance(is_hex, str):
             is_hex = bool(is_hex)
         if is_valid_address(request["id"], {AddressType.DID}, self.service.config):
+            log.info(f"SMBI - Searching for DID wallet {entity_id.hex()}")
             for wallet in self.service.wallet_state_manager.wallets.values():
+                log.info(f"SMBI - Found wallet with type {wallet.type()}")
                 if wallet.type() == WalletType.DECENTRALIZED_ID.value:
+                    log.info(f"SMBI - Found DID wallet {wallet.did_info.origin_coin.name().hex()}")
                     assert isinstance(wallet, DIDWallet)
                     assert wallet.did_info.origin_coin is not None
                     if wallet.did_info.origin_coin.name() == entity_id:
